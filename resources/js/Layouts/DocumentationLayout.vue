@@ -1,4 +1,5 @@
 <template>
+    <MobileWarning />
     <div class="min-h-screen bg-slate-50 flex flex-col">
         <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -36,4 +37,5 @@
 
 <script setup>
 import { Link } from '@inertiajs/vue3';
+import MobileWarning from '@/Components/MobileWarning.vue';
 </script>

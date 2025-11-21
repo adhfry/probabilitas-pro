@@ -1,9 +1,11 @@
 <script setup>
 import { ref } from 'vue';
 import { Link } from '@inertiajs/vue3';
+import MobileWarning from '@/Components/MobileWarning.vue';
 </script>
 
 <template>
+    <MobileWarning />
     <div class="min-h-screen flex flex-col bg-slate-50">
         <!-- Header - Fixed -->
         <nav class="bg-white border-b border-slate-200 shadow-sm z-50 sticky top-0">
