@@ -1,4 +1,4 @@
-# 🚀 Quick Start Guide - Probabilitas Pro
+# 🚀 Quick Start Guide - Probabilitas Pro v2.0
 
 **by Ahda Firly Barori**
 

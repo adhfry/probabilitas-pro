@@ -22,6 +22,9 @@ class WorkspaceController extends Controller
 {
     public function show(Project $project)
     {
+        // Touch project to update 'updated_at' for recent tracking
+        $project->touch();
+        
         $project->load(['attributes', 'classes']);
         
         $trainingData = TrainingData::where('project_id', $project->id)
@@ -72,7 +75,21 @@ class WorkspaceController extends Controller
             'name' => $validated['name'],
         ]);
 
-        return response()->json(['attribute' => $attribute]);
+        // Auto-create training data entries for this attribute with all existing classes
+        $classes = $project->classes;
+        foreach ($classes as $class) {
+            TrainingData::create([
+                'project_id' => $project->id,
+                'class_id' => $class->id,
+                'attribute_id' => $attribute->id,
+                'is_associated' => false // Default: not associated
+            ]);
+        }
+
+        return response()->json([
+            'attribute' => $attribute,
+            'message' => 'Atribut berhasil ditambahkan dan matrix table telah diupdate'
+        ]);
     }
 
     public function addClass(Request $request, Project $project)
@@ -85,11 +102,25 @@ class WorkspaceController extends Controller
         
         $class = ClassModel::create([
             'project_id' => $project->id,
-            'code' => 'Y' . $count,
+            'code' => 'C' . $count, // Fixed: Changed from 'Y' to 'C'
             'name' => $validated['name'],
         ]);
 
-        return response()->json(['class' => $class]);
+        // Auto-create training data entries for this class with all existing attributes
+        $attributes = $project->attributes;
+        foreach ($attributes as $attribute) {
+            TrainingData::create([
+                'project_id' => $project->id,
+                'class_id' => $class->id,
+                'attribute_id' => $attribute->id,
+                'is_associated' => false // Default: not associated
+            ]);
+        }
+
+        return response()->json([
+            'class' => $class,
+            'message' => 'Kelas berhasil ditambahkan dan matrix table telah diupdate'
+        ]);
     }
 
     public function updateTrainingData(Request $request, Project $project)

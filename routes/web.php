@@ -1,12 +1,19 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\WorkspaceController;
 use App\Http\Controllers\AnalysisController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [ProjectController::class, 'index'])->name('dashboard');
+
+Route::get('/documentation', function () {
+    return inertia('Documentation');
+})->name('documentation');
+
+Route::get('/credits', function () {
+    return inertia('Credits');
+})->name('credits');
 
 Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
 Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
@@ -19,5 +26,4 @@ Route::post('/workspace/{project}/classes', [WorkspaceController::class, 'addCla
 Route::post('/workspace/{project}/training-data', [WorkspaceController::class, 'updateTrainingData'])->name('workspace.training-data.update');
 
 Route::post('/analysis/{project}', [AnalysisController::class, 'analyze'])->name('analysis.analyze');
-
-require __DIR__.'/auth.php';
+Route::post('/analysis/{project}/export-pdf', [AnalysisController::class, 'exportPdf'])->name('analysis.export-pdf');

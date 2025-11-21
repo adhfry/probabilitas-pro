@@ -14,6 +14,7 @@ const translateY = ref(0);
 const isDragging = ref(false);
 const dragStart = ref({ x: 0, y: 0 });
 const containerRef = ref(null);
+const showHint = ref(true);
 
 const checkboxStates = ref({});
 
@@ -97,6 +98,10 @@ const resetZoom = () => {
     scale.value = 1;
     translateX.value = 50;
     translateY.value = 50;
+};
+
+const toggleHint = () => {
+    showHint.value = !showHint.value;
 };
 
 onMounted(() => {
@@ -187,12 +192,12 @@ onUnmounted(() => {
             </table>
         </div>
 
-        <!-- Zoom Controls -->
-        <div class="absolute bottom-6 right-6 bg-white rounded-lg shadow-lg border border-slate-200 p-2 flex flex-col gap-2">
+        <!-- Zoom Controls - Fixed Position -->
+        <div class="fixed right-6 top-1/2 -translate-y-1/2 bg-white rounded-lg shadow-lg border border-slate-200 p-2 flex flex-col gap-2 z-20">
             <button
                 @click="zoomIn"
-                class="w-10 h-10 flex items-center justify-center bg-sky-500 text-white rounded hover:bg-sky-600 transition-colors"
-                title="Zoom In"
+                class="w-10 h-10 flex items-center justify-center bg-sky-500 text-white rounded hover:bg-sky-600 transition-colors shadow-md"
+                title="Zoom In (Ctrl + Scroll Up)"
             >
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -201,16 +206,16 @@ onUnmounted(() => {
             
             <button
                 @click="resetZoom"
-                class="w-10 h-10 flex items-center justify-center bg-slate-100 text-slate-700 rounded hover:bg-slate-200 transition-colors text-xs font-bold"
-                title="Reset Zoom"
+                class="w-10 h-10 flex items-center justify-center bg-slate-100 text-slate-700 rounded hover:bg-slate-200 transition-colors text-xs font-bold shadow-md"
+                title="Reset Zoom (100%)"
             >
                 {{ Math.round(scale * 100) }}%
             </button>
             
             <button
                 @click="zoomOut"
-                class="w-10 h-10 flex items-center justify-center bg-sky-500 text-white rounded hover:bg-sky-600 transition-colors"
-                title="Zoom Out"
+                class="w-10 h-10 flex items-center justify-center bg-sky-500 text-white rounded hover:bg-sky-600 transition-colors shadow-md"
+                title="Zoom Out (Ctrl + Scroll Down)"
             >
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
@@ -218,15 +223,59 @@ onUnmounted(() => {
             </button>
         </div>
 
-        <!-- Instructions -->
-        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg shadow-md px-4 py-2 text-sm text-slate-600">
-            <div class="font-semibold mb-1">Kontrol:</div>
-            <div class="text-xs space-y-1">
-                <div>• <kbd class="px-1 bg-slate-200 rounded">Ctrl + Scroll</kbd> untuk zoom</div>
-                <div>• <kbd class="px-1 bg-slate-200 rounded">Drag</kbd> untuk pan</div>
-                <div>• <kbd class="px-1 bg-slate-200 rounded">Click</kbd> untuk toggle checkbox</div>
+        <!-- Instructions Hint -->
+        <transition
+            enter-active-class="transition ease-out duration-200"
+            enter-from-class="opacity-0 -translate-x-4"
+            enter-to-class="opacity-100 translate-x-0"
+            leave-active-class="transition ease-in duration-150"
+            leave-from-class="opacity-100 translate-x-0"
+            leave-to-class="opacity-0 -translate-x-4"
+        >
+            <div 
+                v-if="showHint"
+                class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg shadow-md px-4 py-2 text-sm text-slate-600"
+            >
+                <div class="flex items-center justify-between gap-3 mb-1">
+                    <div class="font-semibold">Kontrol:</div>
+                    <button
+                        @click="toggleHint"
+                        class="w-5 h-5 flex items-center justify-center bg-slate-200 hover:bg-slate-300 rounded transition-colors"
+                        title="Sembunyikan hint"
+                    >
+                        <svg class="w-3 h-3 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M20 12H4" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="text-xs space-y-1">
+                    <div>• <kbd class="px-1 bg-slate-200 rounded">Ctrl + Scroll</kbd> untuk zoom</div>
+                    <div>• <kbd class="px-1 bg-slate-200 rounded">Drag</kbd> untuk pan</div>
+                    <div>• <kbd class="px-1 bg-slate-200 rounded">Click</kbd> untuk toggle checkbox</div>
+                </div>
             </div>
-        </div>
+        </transition>
+
+        <!-- Show Hint Button (when hidden) -->
+        <transition
+            enter-active-class="transition ease-out duration-200"
+            enter-from-class="opacity-0 -translate-x-4"
+            enter-to-class="opacity-100 translate-x-0"
+            leave-active-class="transition ease-in duration-150"
+            leave-from-class="opacity-100 translate-x-0"
+            leave-to-class="opacity-0 -translate-x-4"
+        >
+            <button
+                v-if="!showHint"
+                @click="toggleHint"
+                class="absolute top-4 left-4 w-10 h-10 flex items-center justify-center bg-white/90 backdrop-blur-sm hover:bg-white rounded-lg shadow-md transition-colors"
+                title="Tampilkan hint kontrol"
+            >
+                <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+            </button>
+        </transition>
     </div>
 </template>
 

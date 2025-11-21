@@ -22,7 +22,7 @@ class ProjectController extends Controller
     public function index()
     {
         $projects = Project::withCount(['attributes', 'classes'])
-            ->latest()
+            ->latest('updated_at') // Sort by recently accessed
             ->get();
 
         return Inertia::render('Dashboard', [

@@ -49,9 +49,21 @@ const deleteProject = (projectId) => {
         <div class="py-12">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- Header Section -->
-                <div class="mb-8">
-                    <h1 class="text-3xl font-bold text-slate-800 mb-2">Dashboard</h1>
-                    <p class="text-slate-600">Kelola dan analisis studi kasus diagnosa Anda dengan metode Naive Bayes</p>
+                <div class="mb-8 flex items-center justify-between">
+                    <div>
+                        <h1 class="text-3xl font-bold text-slate-800 mb-2">Dashboard</h1>
+                        <p class="text-slate-600">Kelola dan analisis studi kasus diagnosa Anda dengan metode Naive Bayes</p>
+                    </div>
+                    <button
+                        @click="openModal"
+                        title="Buat worksheet baru untuk memulai studi kasus dan analisis diagnosa baru dengan konfigurasi fresh"
+                        class="px-6 py-3 bg-gradient-to-r from-sky-500 to-blue-600 text-white rounded-lg hover:from-sky-600 hover:to-blue-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl flex items-center gap-2"
+                    >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Buat Worksheet Baru
+                    </button>
                 </div>
 
                 <!-- Projects Grid -->
@@ -109,15 +121,7 @@ const deleteProject = (projectId) => {
                     <p class="text-slate-500 mb-6">Mulai dengan membuat studi kasus baru</p>
                 </div>
 
-                <!-- FAB Button -->
-                <button
-                    @click="openModal"
-                    class="fixed bottom-8 right-8 w-16 h-16 bg-gradient-to-r from-sky-500 to-blue-600 text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center"
-                >
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                </button>
+
             </div>
         </div>
 
